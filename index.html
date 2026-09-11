@@ -1,337 +1,156 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>SAI Cúcuta | Sistema de Automatización de Ingresos</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <style>
-        *{margin:0;padding:0;box-sizing:border-box}
-        body{font-family:'Segoe UI',sans-serif;background:linear-gradient(135deg,#0b1c3a,#1e3a5f);color:white}
-        .menu-ham{position:fixed;top:20px;right:20px;z-index:1000}
-        .menu-ham button{background:rgba(251,191,36,0.9);color:#0b1c3a;border:none;padding:12px;border-radius:50%;font-size:1.5rem;cursor:pointer}
-        .sidebar{position:fixed;top:0;right:-280px;width:280px;height:100vh;background:rgba(17,43,79,0.98);backdrop-filter:blur(20px);transition:right 0.3s;z-index:999;padding:80px 20px 20px}
-        .sidebar.active{right:0}
-        .sidebar nav{display:flex;flex-direction:column;gap:20px}
-        .sidebar nav a{color:white;font-size:1.2rem;text-decoration:none;padding:12px;display:block;border-bottom:1px solid rgba(251,191,36,0.3);cursor:pointer}
-        .sidebar nav a:hover{color:#fbbf24}
-        .card{background:rgba(17,43,79,0.9);backdrop-filter:blur(10px);border:1px solid rgba(251,191,36,0.3);border-radius:20px;padding:30px;margin-bottom:30px}
-        .btn{padding:12px 30px;border-radius:50px;font-weight:bold;text-decoration:none;display:inline-block;transition:transform 0.2s;text-align:center;cursor:pointer;border:none}
-        .btn:hover{transform:scale(1.05)}
-        .btn-primary{background:linear-gradient(45deg,#fbbf24,#f59e0b);color:#0b1c3a}
-        .btn-wsp{background:#25d366;color:white}
-        .btn-plan{background:linear-gradient(45deg,#1a4b6d,#0f2b44);color:white;border:2px solid #fbbf24;width:100%}
-        .btn-prospecto{background:linear-gradient(45deg,#0f2b44,#1a4b6d);color:white;border:2px solid #fbbf24;padding:20px;border-radius:20px;text-align:center;cursor:pointer;transition:0.3s;width:100%}
-        .btn-prospecto:hover{background:#1a4b6d;transform:translateY(-3px)}
-        .whatsapp-float{position:fixed;bottom:30px;right:30px;width:60px;height:60px;background:#25d366;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.8rem;z-index:1000}
-        .footer{background:rgba(11,28,58,0.95);border-top:2px solid rgba(251,191,36,0.3);padding:40px 20px;text-align:center;margin-top:60px}
-        .formulario-box{display:none;background:rgba(0,0,0,0.5);border-radius:20px;padding:25px;margin-top:20px;border:2px solid #fbbf24}
-        .formulario-box.visible{display:block}
-        .formulario-box input,.formulario-box textarea,.formulario-box select{width:100%;padding:12px;margin-bottom:10px;border-radius:12px;border:1px solid rgba(255,255,255,0.2);background:rgba(255,255,255,0.1);color:white}
-        .formulario-box input::placeholder,.formulario-box textarea::placeholder{color:rgba(255,255,255,0.5)}
-        .formulario-box label{display:block;font-size:0.9rem;margin-bottom:5px;color:#fbbf24}
-        .plan-card{background:rgba(0,0,0,0.4);border-radius:20px;padding:25px;border:2px solid rgba(251,191,36,0.3);text-align:center;transition:0.3s}
-        .plan-card:hover{border-color:#fbbf24;transform:translateY(-5px)}
-        .plan-card.destacado{border-color:#fbbf24;background:rgba(251,191,36,0.1)}
-        @media(max-width:768px){.sidebar{width:280px}}
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Registro — Guía Digital Cúcuta</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Segoe UI',sans-serif;background:linear-gradient(135deg,#0b1c3a,#1e3a8a);min-height:100vh;padding:20px;color:#333}
+  .container{max-width:600px;margin:0 auto;background:white;border-radius:24px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,0.3)}
+  .header{background:linear-gradient(135deg,#fbbf24,#f59e0b);padding:30px;text-align:center}
+  .header h1{color:#0b1c3a;font-size:1.8rem;margin-bottom:8px}
+  .header p{color:#0b1c3a;font-size:0.95rem;opacity:0.9}
+  .form{padding:30px}
+  .campo{margin-bottom:20px}
+  .campo label{display:block;font-weight:bold;color:#0b1c3a;margin-bottom:8px;font-size:0.95rem}
+  .campo input,.campo select,.campo textarea{
+    width:100%;padding:14px;border:2px solid #e5e7eb;border-radius:12px;
+    font-size:1rem;font-family:inherit;transition:border 0.2s;
+  }
+  .campo input:focus,.campo select:focus,.campo textarea:focus{
+    outline:none;border-color:#fbbf24;
+  }
+  .campo textarea{resize:vertical;min-height:100px}
+  .planes{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+  .plan{
+    padding:15px;border:2px solid #e5e7eb;border-radius:12px;text-align:center;
+    cursor:pointer;transition:all 0.2s;
+  }
+  .plan:hover{border-color:#fbbf24}
+  .plan.activo{background:#fbbf24;border-color:#fbbf24;color:#0b1c3a}
+  .plan .nombre{font-weight:bold;font-size:1rem;margin-bottom:4px}
+  .plan .precio{font-size:0.85rem;opacity:0.8}
+  .btn{
+    width:100%;padding:18px;background:linear-gradient(135deg,#fbbf24,#f59e0b);
+    color:#0b1c3a;border:none;border-radius:50px;font-size:1.1rem;
+    font-weight:bold;cursor:pointer;margin-top:10px;transition:transform 0.2s;
+  }
+  .btn:hover{transform:scale(1.02)}
+</style>
 </head>
 <body>
-
-<div class="menu-ham"><button onclick="toggleMenu()"><i class="fas fa-bars"></i></button></div>
-<div class="sidebar" id="sidebar">
-    <button onclick="toggleMenu()" style="position:absolute;top:20px;right:20px;color:#fbbf24;font-size:1.5rem;background:none;border:none;">×</button>
-    <nav>
-        <a href="#inicio" onclick="toggleMenu()">🏠 Inicio</a>
-        <a href="#planes" onclick="toggleMenu()">📊 Planes</a>
-        <a href="#prospectos" onclick="toggleMenu()">👥 Regístrate</a>
-        <a href="#panel" onclick="toggleMenu()">📈 Panel SAI</a>
-        <a href="#" onclick="compartirSitio()">📤 Compartir</a>
-    </nav>
+<div class="container">
+  <div class="header">
+    <h1>📋 Registro NGE</h1>
+    <p>Únete a la Guía Digital de Cúcuta</p>
+  </div>
+  
+  <form class="form" id="formRegistro">
+    
+    <div class="campo">
+      <label>👤 Tu nombre</label>
+      <input type="text" name="nombre" required placeholder="Ej: Elis Pastor">
+    </div>
+    
+    <div class="campo">
+      <label>🏪 Nombre de tu negocio</label>
+      <input type="text" name="negocio" required placeholder="Ej: Hidrocool">
+    </div>
+    
+    <div class="campo">
+      <label>📞 Teléfono / WhatsApp</label>
+      <input type="tel" name="telefono" required placeholder="Ej: 3001234567">
+    </div>
+    
+    <div class="campo">
+      <label>📍 Dirección</label>
+      <input type="text" name="direccion" placeholder="Ej: Av. 5 #10-20, Cúcuta">
+    </div>
+    
+    <div class="campo">
+      <label>📝 Descripción de tu negocio</label>
+      <textarea name="descripcion" required placeholder="Cuéntanos qué haces..."></textarea>
+    </div>
+    
+    <div class="campo">
+      <label>🎯 Tipo de prospecto</label>
+      <select name="tipo" required>
+        <option value="">Selecciona...</option>
+        <option value="negocio">Negocio</option>
+        <option value="motorizado">Motorizado</option>
+        <option value="particular">Particular</option>
+        <option value="fundacion">Fundación</option>
+        <option value="profesional">Profesional</option>
+      </select>
+    </div>
+    
+    <div class="campo">
+      <label>💎 Elige tu plan</label>
+      <div class="planes">
+        <div class="plan" data-plan="basico">
+          <div class="nombre">Básico</div>
+          <div class="precio">$25.000</div>
+        </div>
+        <div class="plan" data-plan="pro">
+          <div class="nombre">Pro</div>
+          <div class="precio">$50.000</div>
+        </div>
+        <div class="plan" data-plan="elite">
+          <div class="nombre">Élite</div>
+          <div class="precio">$100.000</div>
+        </div>
+        <div class="plan" data-plan="eliteplus">
+          <div class="nombre">Élite Plus</div>
+          <div class="precio">$200.000</div>
+        </div>
+      </div>
+      <input type="hidden" name="plan" id="planSeleccionado" required>
+    </div>
+    
+    <div class="campo">
+      <label>🖼️ Logo de tu negocio</label>
+      <input type="file" name="logo" accept="image/*">
+    </div>
+    
+    <div class="campo">
+      <label>📸 Foto 1 de tu negocio</label>
+      <input type="file" name="foto1" accept="image/*">
+    </div>
+    
+    <div class="campo">
+      <label>📸 Foto 2 de tu negocio</label>
+      <input type="file" name="foto2" accept="image/*">
+    </div>
+    
+    <button type="submit" class="btn">🚀 Crear mi tarjeta</button>
+    
+  </form>
 </div>
-
-<a href="https://wa.me/573244913371" class="whatsapp-float" target="_blank"><i class="fab fa-whatsapp"></i></a>
-
-<div class="container mx-auto px-4 py-8 max-w-6xl">
-
-    <!-- PORTADA -->
-    <section id="inicio" class="text-center mb-12">
-        <div class="bg-gradient-to-r from-blue-900 to-blue-800 rounded-2xl p-8 shadow-2xl border-2 border-amber-400">
-            <i class="fas fa-chart-line text-6xl text-amber-400 mb-4"></i>
-            <h1 class="text-4xl md:text-5xl font-bold text-white">SISTEMA SAI CÚCUTA</h1>
-            <p class="text-2xl mt-3 text-amber-300 font-bold">Sistema de Automatización de Ingresos</p>
-            <p class="text-lg mt-3 text-gray-300">NGE - Nueva Generación Emprendedora</p>
-            <p class="text-md mt-2 text-gray-400">Únete, elige tu plan, genera tu tarjeta digital y comienza a ganar.</p>
-        </div>
-    </section>
-
-    <!-- PLANES -->
-    <section id="planes" class="mb-12">
-        <h2 class="text-3xl font-bold text-amber-400 text-center mb-8">📊 ELIGE TU PLAN</h2>
-        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div class="plan-card">
-                <i class="fas fa-star text-3xl text-amber-400 mb-3"></i>
-                <h3 class="text-xl font-bold text-white">BÁSICO</h3>
-                <p class="text-3xl font-bold text-amber-400 my-3">$25.000</p>
-                <p class="text-sm text-gray-300">Tarjeta digital básica</p>
-                <p class="text-sm text-gray-300">Aparece en la guía</p>
-                <button onclick="seleccionarPlan('Básico', '25.000')" class="btn btn-plan mt-4">Elegir Básico</button>
-            </div>
-            <div class="plan-card">
-                <i class="fas fa-star text-3xl text-amber-400 mb-3"></i>
-                <h3 class="text-xl font-bold text-white">PRO</h3>
-                <p class="text-3xl font-bold text-amber-400 my-3">$50.000</p>
-                <p class="text-sm text-gray-300">Todo lo del Básico</p>
-                <p class="text-sm text-gray-300">Carrusel + QR + Mapas</p>
-                <button onclick="seleccionarPlan('Pro', '50.000')" class="btn btn-plan mt-4">Elegir Pro</button>
-            </div>
-            <div class="plan-card destacado">
-                <i class="fas fa-crown text-3xl text-amber-400 mb-3"></i>
-                <h3 class="text-xl font-bold text-white">ÉLITE</h3>
-                <p class="text-3xl font-bold text-amber-400 my-3">$100.000</p>
-                <p class="text-sm text-gray-300">Todo lo del Pro</p>
-                <p class="text-sm text-gray-300">Videos + Sistema de referidos</p>
-                <button onclick="seleccionarPlan('Élite', '100.000')" class="btn btn-plan mt-4">Elegir Élite</button>
-            </div>
-            <div class="plan-card">
-                <i class="fas fa-gem text-3xl text-amber-400 mb-3"></i>
-                <h3 class="text-xl font-bold text-white">ÉLITE PLUS</h3>
-                <p class="text-3xl font-bold text-amber-400 my-3">$200.000</p>
-                <p class="text-sm text-gray-300">Todo lo del Élite</p>
-                <p class="text-sm text-gray-300">+ Panel SAI + Ruleta + Prioridad</p>
-                <button onclick="seleccionarPlan('Élite Plus', '200.000')" class="btn btn-plan mt-4">Elegir Élite Plus</button>
-            </div>
-        </div>
-    </section>
-
-    <!-- TIPOS DE PROSPECTO -->
-    <section id="prospectos" class="card">
-        <h2 class="text-3xl font-bold text-amber-400 text-center mb-6">👥 REGÍSTRATE SEGÚN TU PERFIL</h2>
-        <p class="text-center text-gray-300 mb-6" id="planSeleccionadoTexto">Primero elige un plan arriba</p>
-        
-        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-            <button onclick="abrirFormulario('negocio')" class="btn-prospecto">
-                <i class="fas fa-store text-3xl text-amber-400 mb-2"></i>
-                <h3 class="font-bold text-white">🏪 Negocio / Comerciante</h3>
-                <p class="text-xs text-gray-400">Restaurantes, talleres, tiendas, etc.</p>
-            </button>
-            <button onclick="abrirFormulario('motorizado')" class="btn-prospecto">
-                <i class="fas fa-motorcycle text-3xl text-amber-400 mb-2"></i>
-                <h3 class="font-bold text-white">🛵 Motorizado / Taxista</h3>
-                <p class="text-xs text-gray-400">Rutas, transporte, domicilios</p>
-            </button>
-            <button onclick="abrirFormulario('particular')" class="btn-prospecto">
-                <i class="fas fa-user text-3xl text-amber-400 mb-2"></i>
-                <h3 class="font-bold text-white">👤 Particular</h3>
-                <p class="text-xs text-gray-400">Persona natural, sin negocio</p>
-            </button>
-            <button onclick="abrirFormulario('fundacion')" class="btn-prospecto">
-                <i class="fas fa-hand-holding-heart text-3xl text-amber-400 mb-2"></i>
-                <h3 class="font-bold text-white">🏛️ Fundación / Gremio</h3>
-                <p class="text-xs text-gray-400">Asociaciones, instituciones</p>
-            </button>
-            <button onclick="abrirFormulario('profesional')" class="btn-prospecto">
-                <i class="fas fa-briefcase text-3xl text-amber-400 mb-2"></i>
-                <h3 class="font-bold text-white">💼 Profesional</h3>
-                <p class="text-xs text-gray-400">Abogados, doctores, contadores</p>
-            </button>
-        </div>
-
-        <!-- FORMULARIO NEGOCIO -->
-        <div id="form-negocio" class="formulario-box">
-            <h3 class="text-xl font-bold text-amber-400 mb-4"><i class="fas fa-store"></i> Formulario de Negocio</h3>
-            <form id="formNegocio">
-                <label>Nombre del negocio *</label>
-                <input type="text" name="nombre_negocio" placeholder="Ej: Panadería La Espiga" required>
-                <label>Nombre del dueño *</label>
-                <input type="text" name="nombre_dueno" required>
-                <label>WhatsApp *</label>
-                <input type="tel" name="whatsapp" required>
-                <label>Dirección *</label>
-                <input type="text" name="direccion" required>
-                <label>Categoría *</label>
-                <select name="categoria" required>
-                    <option value="">Selecciona...</option>
-                    <option>Restaurante</option>
-                    <option>Taller</option>
-                    <option>Tienda</option>
-                    <option>Ferretería</option>
-                    <option>Salón de belleza</option>
-                    <option>Otro</option>
-                </select>
-                <label>Correo electrónico</label>
-                <input type="email" name="correo">
-                <label>Redes sociales</label>
-                <input type="text" name="redes" placeholder="@usuario_instagram / facebook">
-                <label>Logo (subir foto)</label>
-                <input type="file" name="logo" accept="image/*">
-                <label>Portada (subir foto)</label>
-                <input type="file" name="portada" accept="image/*">
-                <label>Fotos del negocio (hasta 5)</label>
-                <input type="file" name="fotos" accept="image/*" multiple>
-                <input type="hidden" name="plan" id="planNegocio">
-                <button type="submit" class="btn btn-primary w-full mt-4">📤 Enviar solicitud</button>
-            </form>
-        </div>
-
-        <!-- FORMULARIO MOTORIZADO -->
-        <div id="form-motorizado" class="formulario-box">
-            <h3 class="text-xl font-bold text-amber-400 mb-4"><i class="fas fa-motorcycle"></i> Formulario de Motorizado / Taxista</h3>
-            <form id="formMotorizado">
-                <label>Nombre completo *</label>
-                <input type="text" name="nombre" required>
-                <label>WhatsApp *</label>
-                <input type="tel" name="whatsapp" required>
-                <label>Ruta / Línea</label>
-                <input type="text" name="ruta">
-                <label>Zona donde trabaja</label>
-                <input type="text" name="zona" placeholder="Ej: Centro, La Merced, etc.">
-                <label>Años de experiencia</label>
-                <input type="number" name="experiencia">
-                <input type="hidden" name="plan" id="planMotorizado">
-                <button type="submit" class="btn btn-primary w-full mt-4">📤 Enviar solicitud</button>
-            </form>
-        </div>
-
-        <!-- FORMULARIO PARTICULAR -->
-        <div id="form-particular" class="formulario-box">
-            <h3 class="text-xl font-bold text-amber-400 mb-4"><i class="fas fa-user"></i> Formulario de Particular</h3>
-            <form id="formParticular">
-                <label>Nombre completo *</label>
-                <input type="text" name="nombre" required>
-                <label>WhatsApp *</label>
-                <input type="tel" name="whatsapp" required>
-                <input type="hidden" name="plan" id="planParticular">
-                <button type="submit" class="btn btn-primary w-full mt-4">📤 Enviar solicitud</button>
-            </form>
-        </div>
-
-        <!-- FORMULARIO FUNDACIÓN -->
-        <div id="form-fundacion" class="formulario-box">
-            <h3 class="text-xl font-bold text-amber-400 mb-4"><i class="fas fa-hand-holding-heart"></i> Formulario de Fundación / Gremio</h3>
-            <form id="formFundacion">
-                <label>Nombre de la fundación *</label>
-                <input type="text" name="nombre_fundacion" required>
-                <label>NIT (si tiene)</label>
-                <input type="text" name="nit">
-                <label>Representante legal *</label>
-                <input type="text" name="representante" required>
-                <label>WhatsApp *</label>
-                <input type="tel" name="whatsapp" required>
-                <label>Dirección *</label>
-                <input type="text" name="direccion" required>
-                <label>Página web o redes</label>
-                <input type="text" name="web">
-                <input type="hidden" name="plan" id="planFundacion">
-                <button type="submit" class="btn btn-primary w-full mt-4">📤 Enviar solicitud</button>
-            </form>
-        </div>
-
-        <!-- FORMULARIO PROFESIONAL -->
-        <div id="form-profesional" class="formulario-box">
-            <h3 class="text-xl font-bold text-amber-400 mb-4"><i class="fas fa-briefcase"></i> Formulario de Profesional</h3>
-            <form id="formProfesional">
-                <label>Nombre completo *</label>
-                <input type="text" name="nombre" required>
-                <label>Profesión *</label>
-                <input type="text" name="profesion" required>
-                <label>Especialidad</label>
-                <input type="text" name="especialidad">
-                <label>WhatsApp *</label>
-                <input type="tel" name="whatsapp" required>
-                <label>Tarjeta profesional (si aplica)</label>
-                <input type="text" name="tarjeta">
-                <input type="hidden" name="plan" id="planProfesional">
-                <button type="submit" class="btn btn-primary w-full mt-4">📤 Enviar solicitud</button>
-            </form>
-        </div>
-
-    </section>
-
-    <!-- PANEL SAI -->
-    <section id="panel" class="card text-center">
-        <h2 class="text-3xl font-bold text-amber-400 mb-4">📈 PANEL SAI</h2>
-        <div class="bg-black/40 rounded-xl p-4 mb-4">
-            <p class="text-sm text-gray-300">TU CÓDIGO DE AFILIADO</p>
-            <p class="text-3xl font-bold text-amber-400 tracking-wider">NGE-SAI-001</p>
-            <button onclick="copiarCodigo()" class="btn btn-primary mt-2 py-2 px-6 text-sm">📋 Copiar código</button>
-        </div>
-        <div class="grid grid-cols-2 gap-4">
-            <div class="bg-black/30 p-4 rounded-xl"><p class="text-2xl font-bold text-amber-400">$0</p><p class="text-xs">Balance</p></div>
-            <div class="bg-black/30 p-4 rounded-xl"><p class="text-2xl font-bold text-amber-400">0</p><p class="text-xs">Referidos</p></div>
-            <div class="bg-black/30 p-4 rounded-xl"><p class="text-2xl font-bold text-amber-400">1</p><p class="text-xs">Nivel</p></div>
-            <div class="bg-black/30 p-4 rounded-xl"><p class="text-2xl font-bold text-amber-400">2</p><p class="text-xs">Meta</p></div>
-        </div>
-        <div class="bg-black/30 p-4 rounded-xl mt-4">
-            <h3 class="text-xl font-bold text-amber-400">🎡 RULETA SAI</h3>
-            <p class="text-sm">Cada aporte de $2.000 COP te da un boleto para la ruleta semanal.</p>
-            <p class="text-xs text-amber-300 mt-2">Próximo sorteo: 7 días</p>
-        </div>
-    </section>
-
-</div>
-
-<footer class="footer">
-    <p><strong>© 2026 SAI Cúcuta · NGE</strong></p>
-    <p>Unidos Ganamos Más</p>
-    <div class="mt-4"><a href="https://guiadigitalcucuta.pages.dev" class="btn btn-primary">📱 Guía Digital Cúcuta</a></div>
-</footer>
 
 <script>
-    let planElegido = "";
-    let precioElegido = "";
-
-    function toggleMenu(){document.getElementById('sidebar').classList.toggle('active');}
-
-    function seleccionarPlan(nombre, precio){
-        planElegido = nombre;
-        precioElegido = precio;
-        document.getElementById('planSeleccionadoTexto').innerHTML = `✅ Plan seleccionado: <strong class="text-amber-400">${nombre} - $${precio}</strong>`;
-        document.getElementById('planNegocio').value = nombre;
-        document.getElementById('planMotorizado').value = nombre;
-        document.getElementById('planParticular').value = nombre;
-        document.getElementById('planFundacion').value = nombre;
-        document.getElementById('planProfesional').value = nombre;
-        document.getElementById('prospectos').scrollIntoView({behavior:'smooth'});
+  // Selección de plan
+  const planes = document.querySelectorAll('.plan');
+  const planInput = document.getElementById('planSeleccionado');
+  
+  planes.forEach(p => {
+    p.addEventListener('click', () => {
+      planes.forEach(x => x.classList.remove('activo'));
+      p.classList.add('activo');
+      planInput.value = p.dataset.plan;
+    });
+  });
+  
+  // Envío del formulario (por ahora solo muestra los datos)
+  document.getElementById('formRegistro').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const datos = new FormData(e.target);
+    const resumen = {};
+    for (let [key, value] of datos.entries()) {
+      resumen[key] = value instanceof File ? value.name : value;
     }
-
-    function abrirFormulario(tipo){
-        document.querySelectorAll('.formulario-box').forEach(f => f.classList.remove('visible'));
-        const form = document.getElementById('form-' + tipo);
-        form.classList.add('visible');
-        form.scrollIntoView({behavior:'smooth'});
-    }
-
-    function enviarFormulario(e, tipoFormulario){
-        e.preventDefault();
-        const formData = new FormData(e.target);
-        let texto = `📋 *NUEVA SOLICITUD - ${tipoFormulario.toUpperCase()}*%0A%0A`;
-        texto += `*Plan:* ${planElegido || 'No seleccionado'} ($${precioElegido})%0A%0A`;
-        for (let [key, value] of formData.entries()) {
-            if (value && key !== 'plan') texto += `*${key}:* ${value}%0A`;
-        }
-        window.open(`https://wa.me/573244913371?text=${texto}`, '_blank');
-        alert('✅ Solicitud enviada. Te contactaremos pronto.');
-        e.target.reset();
-    }
-
-    document.getElementById('formNegocio').addEventListener('submit', e => enviarFormulario(e, 'Negocio'));
-    document.getElementById('formMotorizado').addEventListener('submit', e => enviarFormulario(e, 'Motorizado'));
-    document.getElementById('formParticular').addEventListener('submit', e => enviarFormulario(e, 'Particular'));
-    document.getElementById('formFundacion').addEventListener('submit', e => enviarFormulario(e, 'Fundación'));
-    document.getElementById('formProfesional').addEventListener('submit', e => enviarFormulario(e, 'Profesional'));
-
-    function compartirSitio(){
-        const url = window.location.href;
-        if (navigator.share) navigator.share({title:'SAI Cúcuta', text:'Únete al sistema', url:url});
-        else { navigator.clipboard.writeText(url); alert('📋 Enlace copiado'); }
-    }
-
-    function copiarCodigo(){
-        navigator.clipboard.writeText('NGE-SAI-001');
-        alert('✅ Código copiado');
-    }
+    alert('✅ Datos capturados:\n\n' + JSON.stringify(resumen, null, 2));
+  });
 </script>
 </body>
 </html>
