@@ -1,11 +1,7 @@
-name = "guia-digital"
+name = "guia-digital-registro"
+main = "functions/registro.js"
 compatibility_date = "2026-09-11"
-pages_build_output_dir = "."
 
-# Variables de entorno (NO pongas la contraseña aquí, eso va como secret)
 [vars]
 MONGODB_DB = "guia_digital"
 BASE_URL = "https://guia-digital.com"
-
-# La contraseña de MongoDB se configura como SECRET en Cloudflare (te explico después)
-# MONGODB_URI = "mongodb+srv://ngegestion_db_user:TU_PASSWORD@cluster0.3hasrlg.mongodb.net/?appName=Cluster0"
