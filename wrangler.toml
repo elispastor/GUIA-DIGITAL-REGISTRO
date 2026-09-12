@@ -3,8 +3,9 @@ main = "functions/registro.js"
 compatibility_date = "2026-09-11"
 workers_dev = true
 
-[site]
-bucket = "."
+[assets]
+directory = "."
+binding = "ASSETS"
 
 [vars]
 MONGODB_DB = "guia_digital"
