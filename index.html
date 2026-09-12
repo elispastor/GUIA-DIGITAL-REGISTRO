@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Registro — Guía Digital Cúcuta</title>
+<title>Registro NGE — Guía Digital Cúcuta</title>
 <style>
   *{margin:0;padding:0;box-sizing:border-box}
   body{font-family:'Segoe UI',sans-serif;background:linear-gradient(135deg,#0b1c3a,#1e3a8a);min-height:100vh;padding:20px;color:#333}
@@ -18,25 +18,22 @@
     width:100%;padding:14px;border:2px solid #e5e7eb;border-radius:12px;
     font-size:1rem;font-family:inherit;transition:border 0.2s;
   }
-  .campo input:focus,.campo select:focus,.campo textarea:focus{
-    outline:none;border-color:#fbbf24;
-  }
+  .campo input:focus,.campo select:focus,.campo textarea:focus{outline:none;border-color:#fbbf24}
   .campo textarea{resize:vertical;min-height:100px}
   .planes{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
-  .plan{
-    padding:15px;border:2px solid #e5e7eb;border-radius:12px;text-align:center;
-    cursor:pointer;transition:all 0.2s;
-  }
+  .plan{padding:15px;border:2px solid #e5e7eb;border-radius:12px;text-align:center;cursor:pointer;transition:all 0.2s}
   .plan:hover{border-color:#fbbf24}
   .plan.activo{background:#fbbf24;border-color:#fbbf24;color:#0b1c3a}
   .plan .nombre{font-weight:bold;font-size:1rem;margin-bottom:4px}
   .plan .precio{font-size:0.85rem;opacity:0.8}
-  .btn{
-    width:100%;padding:18px;background:linear-gradient(135deg,#fbbf24,#f59e0b);
-    color:#0b1c3a;border:none;border-radius:50px;font-size:1.1rem;
-    font-weight:bold;cursor:pointer;margin-top:10px;transition:transform 0.2s;
-  }
+  .tipos{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+  .tipo{padding:15px;border:2px solid #e5e7eb;border-radius:12px;text-align:center;cursor:pointer;transition:all 0.2s;font-size:0.9rem}
+  .tipo:hover{border-color:#fbbf24}
+  .tipo.activo{background:#0b1c3a;border-color:#0b1c3a;color:white}
+  .btn{width:100%;padding:18px;background:linear-gradient(135deg,#fbbf24,#f59e0b);color:#0b1c3a;border:none;border-radius:50px;font-size:1.1rem;font-weight:bold;cursor:pointer;margin-top:10px;transition:transform 0.2s}
   .btn:hover{transform:scale(1.02)}
+  .formulario-tipo{display:none}
+  .formulario-tipo.activo{display:block}
 </style>
 </head>
 <body>
@@ -45,86 +42,103 @@
     <h1>📋 Registro NGE</h1>
     <p>Únete a la Guía Digital de Cúcuta</p>
   </div>
-  
+
   <form class="form" id="formRegistro">
-    
+
+    <!-- PASO 1: Elegir plan -->
     <div class="campo">
-      <label>👤 Tu nombre</label>
-      <input type="text" name="nombre" required placeholder="Ej: Elis Pastor">
-    </div>
-    
-    <div class="campo">
-      <label>🏪 Nombre de tu negocio</label>
-      <input type="text" name="negocio" required placeholder="Ej: Hidrocool">
-    </div>
-    
-    <div class="campo">
-      <label>📞 Teléfono / WhatsApp</label>
-      <input type="tel" name="telefono" required placeholder="Ej: 3001234567">
-    </div>
-    
-    <div class="campo">
-      <label>📍 Dirección</label>
-      <input type="text" name="direccion" placeholder="Ej: Av. 5 #10-20, Cúcuta">
-    </div>
-    
-    <div class="campo">
-      <label>📝 Descripción de tu negocio</label>
-      <textarea name="descripcion" required placeholder="Cuéntanos qué haces..."></textarea>
-    </div>
-    
-    <div class="campo">
-      <label>🎯 Tipo de prospecto</label>
-      <select name="tipo" required>
-        <option value="">Selecciona...</option>
-        <option value="negocio">Negocio</option>
-        <option value="motorizado">Motorizado</option>
-        <option value="particular">Particular</option>
-        <option value="fundacion">Fundación</option>
-        <option value="profesional">Profesional</option>
-      </select>
-    </div>
-    
-    <div class="campo">
-      <label>💎 Elige tu plan</label>
+      <label>💎 Paso 1: Elige tu plan</label>
       <div class="planes">
-        <div class="plan" data-plan="basico">
-          <div class="nombre">Básico</div>
-          <div class="precio">$25.000</div>
-        </div>
-        <div class="plan" data-plan="pro">
-          <div class="nombre">Pro</div>
-          <div class="precio">$50.000</div>
-        </div>
-        <div class="plan" data-plan="elite">
-          <div class="nombre">Élite</div>
-          <div class="precio">$100.000</div>
-        </div>
-        <div class="plan" data-plan="eliteplus">
-          <div class="nombre">Élite Plus</div>
-          <div class="precio">$200.000</div>
-        </div>
+        <div class="plan" data-plan="basico"><div class="nombre">Básico</div><div class="precio">$25.000</div></div>
+        <div class="plan" data-plan="pro"><div class="nombre">Pro</div><div class="precio">$50.000</div></div>
+        <div class="plan" data-plan="elite"><div class="nombre">Élite</div><div class="precio">$100.000</div></div>
+        <div class="plan" data-plan="eliteplus"><div class="nombre">Élite Plus</div><div class="precio">$200.000</div></div>
       </div>
       <input type="hidden" name="plan" id="planSeleccionado" required>
     </div>
-    
+
+    <!-- PASO 2: Elegir tipo -->
     <div class="campo">
-      <label>🖼️ Logo de tu negocio</label>
-      <input type="file" name="logo" accept="image/*">
+      <label>🎯 Paso 2: ¿Qué tipo de prospecto eres?</label>
+      <div class="tipos">
+        <div class="tipo" data-tipo="negocio">🏪 Negocio</div>
+        <div class="tipo" data-tipo="motorizado">🏍️ Motorizado / Taxista</div>
+        <div class="tipo" data-tipo="particular">👤 Particular</div>
+        <div class="tipo" data-tipo="fundacion">🏛️ Fundación / Gremio</div>
+        <div class="tipo" data-tipo="profesional">💼 Profesional</div>
+      </div>
+      <input type="hidden" name="tipo" id="tipoSeleccionado" required>
     </div>
-    
-    <div class="campo">
-      <label>📸 Foto 1 de tu negocio</label>
-      <input type="file" name="foto1" accept="image/*">
+
+    <!-- FORMULARIO: NEGOCIO -->
+    <div class="formulario-tipo" id="form-negocio">
+      <div class="campo"><label>🏪 Nombre del negocio</label><input type="text" name="negocio_nombre" placeholder="Ej: Hidrocool"></div>
+      <div class="campo"><label>👤 Nombre del dueño</label><input type="text" name="negocio_dueno" placeholder="Ej: Elis Pastor"></div>
+      <div class="campo"><label>📞 WhatsApp</label><input type="tel" name="negocio_whatsapp" placeholder="Ej: 3001234567"></div>
+      <div class="campo"><label>📍 Dirección</label><input type="text" name="negocio_direccion" placeholder="Ej: Av. 5 #10-20"></div>
+      <div class="campo"><label>🏷️ Categoría</label><input type="text" name="negocio_categoria" placeholder="Ej: Taller, Restaurante, Tienda"></div>
+      <div class="campo"><label>✉️ Correo</label><input type="email" name="negocio_correo" placeholder="Ej: correo@ejemplo.com"></div>
+      <div class="campo"><label>🖼️ Logo</label><input type="file" name="negocio_logo" accept="image/*"></div>
+      <div class="campo"><label>📸 Portada</label><input type="file" name="negocio_portada" accept="image/*"></div>
+      <div class="campo"><label>📸 Fotos (hasta 3)</label><input type="file" name="negocio_fotos" accept="image/*" multiple></div>
     </div>
-    
-    <div class="campo">
-      <label>📸 Foto 2 de tu negocio</label>
-      <input type="file" name="foto2" accept="image/*">
+
+    <!-- FORMULARIO: MOTORIZADO -->
+    <div class="formulario-tipo" id="form-motorizado">
+      <div class="campo"><label>👤 Nombre completo</label><input type="text" name="moto_nombre" placeholder="Ej: Juan Pérez"></div>
+      <div class="campo"><label>📞 WhatsApp</label><input type="tel" name="moto_whatsapp" placeholder="Ej: 3001234567"></div>
+      <div class="campo"><label>📍 Ciudad / Zona</label><input type="text" name="moto_zona" placeholder="Ej: Cúcuta Centro"></div>
+      <div class="campo"><label>🚗 Tipo de vehículo</label>
+        <select name="moto_vehiculo">
+          <option value="">Selecciona...</option>
+          <option value="moto">Moto</option>
+          <option value="taxi">Taxi</option>
+          <option value="particular">Particular</option>
+        </select>
+      </div>
+      <div class="campo"><label>🔢 Placa</label><input type="text" name="moto_placa" placeholder="Ej: ABC123"></div>
+      <div class="campo"><label>📸 Foto del vehículo</label><input type="file" name="moto_foto_vehiculo" accept="image/*"></div>
+      <div class="campo"><label>📸 Foto del conductor</label><input type="file" name="moto_foto_conductor" accept="image/*"></div>
+      <div class="campo"><label>📝 Descripción del servicio</label><textarea name="moto_descripcion" placeholder="Cuéntanos qué ofreces..."></textarea></div>
     </div>
-    
+
+    <!-- FORMULARIO: PARTICULAR -->
+    <div class="formulario-tipo" id="form-particular">
+      <div class="campo"><label>👤 Nombre completo</label><input type="text" name="part_nombre" placeholder="Ej: María López"></div>
+      <div class="campo"><label>📞 WhatsApp</label><input type="tel" name="part_whatsapp" placeholder="Ej: 3001234567"></div>
+      <div class="campo"><label>✉️ Correo</label><input type="email" name="part_correo" placeholder="Ej: correo@ejemplo.com"></div>
+      <div class="campo"><label>📍 Ciudad</label><input type="text" name="part_ciudad" placeholder="Ej: Cúcuta"></div>
+      <div class="campo"><label>💼 Ocupación</label><input type="text" name="part_ocupacion" placeholder="Ej: Estudiante, Ama de casa"></div>
+      <div class="campo"><label>📸 Foto de perfil</label><input type="file" name="part_foto" accept="image/*"></div>
+      <div class="campo"><label>📝 Descripción (qué ofreces)</label><textarea name="part_descripcion" placeholder="Cuéntanos..."></textarea></div>
+    </div>
+
+    <!-- FORMULARIO: FUNDACIÓN -->
+    <div class="formulario-tipo" id="form-fundacion">
+      <div class="campo"><label>🏛️ Nombre de la fundación</label><input type="text" name="fund_nombre" placeholder="Ej: Fundación Esperanza"></div>
+      <div class="campo"><label>👤 Representante</label><input type="text" name="fund_representante" placeholder="Ej: Carlos Gómez"></div>
+      <div class="campo"><label>📞 WhatsApp</label><input type="tel" name="fund_whatsapp" placeholder="Ej: 3001234567"></div>
+      <div class="campo"><label>📍 Dirección</label><input type="text" name="fund_direccion" placeholder="Ej: Av. 5 #10-20"></div>
+      <div class="campo"><label>🔢 NIT / Registro</label><input type="text" name="fund_nit" placeholder="Ej: 900123456-7"></div>
+      <div class="campo"><label>🎯 Misión (breve)</label><textarea name="fund_mision" placeholder="Cuéntanos tu misión..."></textarea></div>
+      <div class="campo"><label>🖼️ Logo</label><input type="file" name="fund_logo" accept="image/*"></div>
+      <div class="campo"><label>📸 Fotos (hasta 3)</label><input type="file" name="fund_fotos" accept="image/*" multiple></div>
+    </div>
+
+    <!-- FORMULARIO: PROFESIONAL -->
+    <div class="formulario-tipo" id="form-profesional">
+      <div class="campo"><label>👤 Nombre completo</label><input type="text" name="prof_nombre" placeholder="Ej: Dr. Juan Pérez"></div>
+      <div class="campo"><label>💼 Profesión / Especialidad</label><input type="text" name="prof_profesion" placeholder="Ej: Abogado, Médico"></div>
+      <div class="campo"><label>📞 WhatsApp</label><input type="tel" name="prof_whatsapp" placeholder="Ej: 3001234567"></div>
+      <div class="campo"><label>✉️ Correo</label><input type="email" name="prof_correo" placeholder="Ej: correo@ejemplo.com"></div>
+      <div class="campo"><label>📍 Ciudad</label><input type="text" name="prof_ciudad" placeholder="Ej: Cúcuta"></div>
+      <div class="campo"><label>🔢 Tarjeta profesional</label><input type="text" name="prof_tarjeta" placeholder="Ej: 123456"></div>
+      <div class="campo"><label>📸 Foto de perfil</label><input type="file" name="prof_foto" accept="image/*"></div>
+      <div class="campo"><label>📝 Descripción de servicios</label><textarea name="prof_descripcion" placeholder="Cuéntanos qué servicios ofreces..."></textarea></div>
+    </div>
+
     <button type="submit" class="btn">🚀 Crear mi tarjeta</button>
-    
+
   </form>
 </div>
 
@@ -132,7 +146,6 @@
   // Selección de plan
   const planes = document.querySelectorAll('.plan');
   const planInput = document.getElementById('planSeleccionado');
-  
   planes.forEach(p => {
     p.addEventListener('click', () => {
       planes.forEach(x => x.classList.remove('activo'));
@@ -140,16 +153,31 @@
       planInput.value = p.dataset.plan;
     });
   });
-  
-  // Envío del formulario (por ahora solo muestra los datos)
+
+  // Selección de tipo
+  const tipos = document.querySelectorAll('.tipo');
+  const tipoInput = document.getElementById('tipoSeleccionado');
+  const formularios = document.querySelectorAll('.formulario-tipo');
+
+  tipos.forEach(t => {
+    t.addEventListener('click', () => {
+      tipos.forEach(x => x.classList.remove('activo'));
+      t.classList.add('activo');
+      tipoInput.value = t.dataset.tipo;
+
+      // Ocultar todos los formularios
+      formularios.forEach(f => f.classList.remove('activo'));
+
+      // Mostrar el formulario correspondiente
+      const formActivo = document.getElementById('form-' + t.dataset.tipo);
+      if (formActivo) formActivo.classList.add('activo');
+    });
+  });
+
+  // Envío
   document.getElementById('formRegistro').addEventListener('submit', (e) => {
     e.preventDefault();
-    const datos = new FormData(e.target);
-    const resumen = {};
-    for (let [key, value] of datos.entries()) {
-      resumen[key] = value instanceof File ? value.name : value;
-    }
-    alert('✅ Datos capturados:\n\n' + JSON.stringify(resumen, null, 2));
+    alert('✅ Formulario listo. En el siguiente paso conectamos el envío.');
   });
 </script>
 </body>
